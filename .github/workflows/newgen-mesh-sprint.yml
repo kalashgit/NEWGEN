@@ -18,3 +18,19 @@ jobs:
         run: |
           python engines/mesh_sprint/factory.py --demo 12 --out /tmp/newgen_mesh_smoke --workers 2
           python engines/mesh_sprint/verify.py --root /tmp/newgen_mesh_smoke
+      - name: Run full four-stage loop (original demo identities; not Golden)
+        run: |
+          python engines/mesh_sprint/closed_loop.py --out /tmp/newgen_closed_loop_ci
+          python - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('/tmp/newgen_closed_loop_ci')
+          report=json.loads((root/'run_report.json').read_text())
+          assert report['packaged']==3 and report['rejected']==0
+          assert report['golden_approvals']==0
+          for asset in report['assets']:
+              folder=root/'assets'/asset['asset_id']
+              manifest=json.loads((folder/'asset_manifest.json').read_text())
+              assert len(manifest['lods'])==3 and len(manifest['sprite_views'])==8
+              assert manifest['gameplay_qa']=='NOT_RUN_NO_GODOT_RUNTIME'
+          PY
