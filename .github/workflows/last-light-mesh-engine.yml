@@ -1,0 +1,27 @@
+name: LAST LIGHT Mesh V1.1 adapter tests
+on:
+  push:
+    paths:
+      - 'tools/last_light_mesh_adapter.py'
+      - 'integrations/last_light/last_light_mesh_factory_v1_1.py'
+      - 'integrations/last_light/requirements-mesh.txt'
+      - 'tests/test_last_light_mesh_adapter.py'
+      - '.github/workflows/last-light-mesh-engine.yml'
+  pull_request:
+    paths:
+      - 'tools/last_light_mesh_adapter.py'
+      - 'integrations/last_light/**'
+      - 'tests/test_last_light_mesh_adapter.py'
+permissions:
+  contents: read
+jobs:
+  mesh-adapter-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - run: python -m pip install -r integrations/last_light/requirements-mesh.txt
+      - run: python -m unittest discover -s tests -p 'test_last_light_mesh_adapter.py' -v
