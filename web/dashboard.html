@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>NEWGEN // Foundry Control</title>
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,-apple-system,Segoe UI,Arial,sans-serif;background:#080b11;color:#eff3f9}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(ellipse at 90% 0,#192232 0,#080b11 45%);}
+.shell{display:grid;grid-template-columns:218px 1fr;min-height:100vh}.sidebar{border-right:1px solid #202c38;padding:27px 20px;background:#090e16}
+.logo{letter-spacing:.27em;font-size:23px;font-weight:850}.logo b{color:#83c2fe}.small{color:#7e90a6;font-size:11px;letter-spacing:.13em;text-transform:uppercase}
+.nav{margin-top:48px}.nav div{padding:13px 15px;color:#9babc0;margin:8px 0;border-radius:8px}.nav .active{background:#182438;color:#e9f4ff;border:1px solid #2a4261}
+.bottom{position:fixed;bottom:28px;color:#7c8ca2;font-size:12px;max-width:178px}
+main{max-width:1480px;padding:35px 48px 70px;width:100%;margin:auto}
+header{display:flex;justify-content:space-between;align-items:center;gap:20px}h1{margin:5px 0;font-size:29px;letter-spacing:-.03em}p{color:#93a4b9;margin:8px 0}
+.live{font-size:12px;color:#87b8dd;border:1px solid #29455a;border-radius:30px;padding:8px 14px;white-space:nowrap}
+.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin:28px 0}
+.metric,.panel,.engine{background:linear-gradient(145deg,#121a25,#0c121b);border:1px solid #273342;border-radius:13px}
+.metric{padding:19px}.metric .num{font-size:30px;font-weight:740;margin-top:9px;font-variant-numeric:tabular-nums}
+.metric .small{letter-spacing:.09em}
+.section-title{display:flex;align-items:center;justify-content:space-between;margin:28px 0 14px}h2{font-size:17px;margin:0;letter-spacing:.01em}
+.engines{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.engine{padding:19px 15px;min-height:142px}.engine .index{color:#75a8d5;font-size:12px;letter-spacing:.12em}.engine h3{font-size:14px;margin:14px 0 8px}.engine p{font-size:12px;margin:0}
+.status{font-size:10px;letter-spacing:.04em;text-transform:uppercase;border:1px solid #405169;border-radius:5px;padding:3px 6px;color:#a8b8cd;display:inline-block;margin-top:10px}.status.configured,.status.approved{color:#90e1b7;border-color:#32644d}.status.running,.status.queued{color:#8bc9ff;border-color:#3c6084}.status.failed,.status.blocked_unconfigured,.status.needs_visual_review{color:#ffbc91;border-color:#754934}
+.two{display:grid;grid-template-columns:minmax(300px,380px) minmax(300px,1fr);gap:16px;margin-top:20px}
+.panel{padding:21px}label{display:block;font-size:12px;color:#93a4b9;margin:15px 0 6px}
+input,textarea{font:inherit;color:#eff6ff;background:#0b111a;border:1px solid #344256;border-radius:7px;width:100%;padding:12px}
+input:focus,textarea:focus{outline:1px solid #76ade4}textarea{resize:vertical;min-height:100px}
+button{font:inherit;border:1px solid #33506c;border-radius:7px;background:#183553;color:#dcefff;padding:10px 14px;cursor:pointer}
+button:hover{background:#244c74}button.secondary{background:#151f2c;border-color:#344256;color:#afc3d9}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}
+.note{border-left:2px solid #54799c;padding:8px 11px;color:#91a5bd;font-size:12px;line-height:1.5;margin-top:12px;background:#101924}
+#feedback{font-size:12px;color:#bfdbf4;min-height:1.4em;margin-top:9px}
+table{width:100%;border-collapse:collapse}th{text-align:left;color:#768ca4;font-size:11px;font-weight:650;text-transform:uppercase;letter-spacing:.08em;padding:12px 9px;border-bottom:1px solid #253444}
+td{padding:12px 9px;border-bottom:1px solid #1d2937;font-size:12px;color:#bbcadb}tbody tr{cursor:pointer}tbody tr:hover{background:#1c2735}
+.mono{font-family:ui-monospace,SFMono-Regular,Consolas,monospace}pre{background:#090f17;border:1px solid #243346;padding:15px;white-space:pre-wrap;overflow-wrap:anywhere;max-height:390px;overflow:auto;font-size:11px;color:#a9c3dd;border-radius:8px}
+#selected{margin-top:16px}.empty{color:#758ba2;font-size:13px;padding:28px;text-align:center}
+footer{color:#71859c;font-size:12px;margin-top:30px}
+@media(max-width:1100px){.engines{grid-template-columns:repeat(2,1fr)}.summary{grid-template-columns:repeat(2,1fr)}.two{grid-template-columns:1fr}}
+@media(max-width:720px){.shell{grid-template-columns:1fr}.sidebar{padding:15px 20px;display:flex;justify-content:space-between;align-items:center}.nav,.bottom{display:none}main{padding:20px 15px 60px}.engines{grid-template-columns:repeat(2,minmax(0,1fr))}h1{font-size:23px}.live{font-size:10px}table{display:block;overflow:auto}.summary{gap:9px}.metric{padding:13px}}
+</style></head>
+<body><div class="shell">
+<aside class="sidebar"><div><div class="logo">NEW<b>GEN</b></div><div class="small" style="margin-top:8px">Asset intelligence system</div></div><nav class="nav"><div class="active">◆ &nbsp; Factory overview</div><div>◈ &nbsp; Engine registry</div><div>▤ &nbsp; Production jobs</div><div>◉ &nbsp; Quality gates</div></nav><div class="bottom">LOCAL CONTROL PLANE<br>NO PAID ENGINES ENABLED BY DEFAULT</div></aside>
+<main>
+<header><div><div class="small">UNIFIED FOUNDRY / VERSION 0.1</div><h1>Production Control</h1><p>One pipeline. Four engines. Verifiable output.</p></div><div class="live" id="connection">● Connecting...</div></header>
+<div class="summary"><div class="metric"><div class="small">Total jobs</div><div class="num" id="total">0</div></div><div class="metric"><div class="small">Queued</div><div class="num" id="queued">0</div></div><div class="metric"><div class="small">Running</div><div class="num" id="running">0</div></div><div class="metric"><div class="small">Fully approved</div><div class="num" id="approved">0</div></div></div>
+<div class="section-title"><h2>Connected production engines</h2><span class="small">Separate, versioned adapters</span></div>
+<div class="engines" id="engines"></div>
+<div class="two">
+<section class="panel"><div class="section-title" style="margin-top:0"><h2>New asset batch</h2><span class="small">Local intake</span></div>
+<form id="singleForm"><label for="asset">Canonical asset ID</label><input id="asset" placeholder="vehicle_battery_001" required pattern="[a-z][a-z0-9_]{2,63}"><label for="reference">Reference image in intake/</label><input id="reference" required placeholder="battery.png"><div class="actions"><button type="submit">+ Queue asset</button></div></form>
+<label for="batch">Batch queue (one asset_id,reference_file per line)</label><textarea id="batch" placeholder="vehicle_battery_001,battery.png&#10;cast_iron_skillet_001,skillet.png"></textarea>
+<div class="actions"><button class="secondary" id="batchBtn">Queue batch</button></div>
+<div class="note">Intake images must already exist on the machine running NEWGEN. Unconfigured stages stop safely. No synthetic results, paid compute or automatic Golden approvals.</div>
+<div id="feedback" role="status"></div>
+</section>
+<section class="panel"><div class="section-title" style="margin-top:0"><h2>Job queue</h2><span class="small">Live state + provenance</span></div>
+<div style="overflow-x:auto"><table><thead><tr><th>Asset</th><th>Status</th><th>Stage</th><th>Attempts</th></tr></thead><tbody id="jobs"><tr><td colspan="4" class="empty">No jobs submitted</td></tr></tbody></table></div>
+<div id="selected"><div class="empty">Select a job to inspect its evidence and quality gates.</div></div>
+</section></div>
+<footer>NEWGEN development branch • Existing LAST LIGHT production remains untouched • Founder approval is always explicit</footer>
+</main></div>
+<script>
+"use strict";
+const $ = (id) => document.getElementById(id);
+let selectedId = null, jobs = [], lastStatus = null;
+const names = [
+  ["sprite_2d","01","2D Sprite Engine","Source art / visual states"],
+  ["mesh_3d","02","3D Mesh Engine","Real geometry candidates"],
+  ["model_3d","03","3D Modeling Engine","Recipes / editable masters"],
+  ["gameplay_asset","04","Gameplay Asset Factory","Godot interactions / states"]
+];
+function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=String(text);return e}
+function statusBadge(s){return node("span","status "+s,s.replaceAll("_"," "))}
+async function request(path,method,body,founderToken){
+ const headers={"Content-Type":"application/json"};
+ if(founderToken)headers["X-Newgen-Founder-Token"]=founderToken;
+ const r=await fetch(path,{method:method||"GET",headers,body:body?JSON.stringify(body):undefined});
+ const data=await r.json();
+ if(!r.ok)throw Error(data.error||"Request failed");
+ return data;
+}
+function showMessage(s){$("feedback").textContent=s}
+function drawEngines(config){
+ const root=$("engines");root.replaceChildren();
+ for(const e of names){
+  const box=node("div","engine");box.append(node("div","index","MODULE "+e[1]),node("h3","",e[2]),node("p","",e[3]),statusBadge(config[e[0]]||"unconfigured"));
+  root.append(box);
+ }
+}
+function drawJobs(){
+ const table=$("jobs");table.replaceChildren();
+ if(!jobs.length){const r=node("tr");const d=node("td","empty","No jobs submitted");d.colSpan=4;r.append(d);table.append(r);return}
+ for(const job of jobs){
+  const row=node("tr");row.append(node("td","mono",job.asset_id),node("td","",null),node("td","mono",job.stage),node("td","mono",job.visual_attempts||0));
+  row.children[1].append(statusBadge(job.status));row.onclick=()=>{selectedId=job.id;drawSelected()};
+  table.append(row);
+ }
+}
+function drawSelected(){
+ const root=$("selected");root.replaceChildren();
+ const j=jobs.find(x=>x.id===selectedId);if(!j){root.append(node("div","empty","Select a job to inspect it."));return}
+ root.append(node("div","small","JOB "+j.id.slice(0,12)+" / "+j.asset_id));
+ const pre=node("pre");pre.textContent=JSON.stringify({status:j.status,error:j.error,source_sha256:j.source_sha256,visual_attempts:j.visual_attempts,founder_golden_approved:j.founder_golden_approved,godot_iphone_verified:j.godot_iphone_verified,artifacts:j.artifacts,history:j.history},null,2);
+ root.append(pre);
+ const actions=node("div","actions");
+ if(["blocked_unconfigured","failed","needs_visual_review"].includes(j.status)){
+  const btn=node("button","secondary","Retry");btn.onclick=async()=>{try{await request("/api/jobs/"+j.id+"/retry","POST",{});await refresh()}catch(e){showMessage(e.message)}};actions.append(btn);
+ }
+ if(j.status==="awaiting_founder_review"){
+  const btn=node("button","secondary","Founder Golden approval");btn.onclick=()=>approveGate(j,"founder_golden");actions.append(btn);
+  if(j.founder_golden_approved){const b=node("button","secondary","Mark iPhone QA verified");b.onclick=()=>approveGate(j,"godot_iphone");actions.append(b)}
+ }
+ root.append(actions);
+}
+async function approveGate(job,gate){
+ const actor=prompt("Approver name for audit trail");if(!actor)return;
+ const token=prompt("NEWGEN founder approval token (not saved)");if(!token)return;
+ try{await request("/api/jobs/"+job.id+"/approve","POST",{gate,actor},token);await refresh()}catch(e){showMessage(e.message)}
+}
+async function refresh(){
+ try{
+  const [stats,listing]=await Promise.all([request("/api/status"),request("/api/jobs")]);
+  lastStatus=stats;jobs=listing.jobs;
+  $("connection").textContent="● LOCAL ENGINE ONLINE";$("total").textContent=stats.jobs;
+  $("queued").textContent=stats.queued;$("running").textContent=stats.running;$("approved").textContent=stats.approved;
+  drawEngines(stats.engines);drawJobs();drawSelected();
+ }catch(e){$("connection").textContent="● CONNECTION LOST";showMessage(e.message)}
+}
+$("singleForm").addEventListener("submit",async(e)=>{e.preventDefault();try{
+ const job=await request("/api/jobs","POST",{asset_id:$("asset").value.trim(),reference:$("reference").value.trim()});
+ showMessage("Queued "+job.asset_id+" ("+job.id.slice(0,10)+")");selectedId=job.id;await refresh()
+ }catch(err){showMessage(err.message)}
+});
+$("batchBtn").onclick=async()=>{const items=$("batch").value.split(/\r?\n/).map(s=>s.trim()).filter(Boolean).map(s=>{const i=s.indexOf(",");return {asset_id:s.slice(0,i).trim(),reference:i<0?"":s.slice(i+1).trim()}});
+ try{const r=await request("/api/batches","POST",{items});showMessage("Queued "+r.created.length+" assets. Errors: "+r.errors.length);await refresh()}catch(e){showMessage(e.message)}};
+refresh();setInterval(refresh,3000);
+</script></body></html>
