@@ -23,7 +23,7 @@ from pathlib import Path
 import numpy as np
 import trimesh
 
-VERSION = 'newgen-mesh-sprint-0.3.1-geometry-pbr'
+VERSION = 'newgen-mesh-sprint-0.3.2-geometry-pbr'
 FAMILIES = ('avocado', 'backpack', 'axe', 'armor', 'shelf', 'bottle',
             'barrel', 'crate', 'helmet', 'medkit', 'chair', 'canister')
 IDENT = re.compile(r'[A-Za-z0-9][A-Za-z0-9_.-]{0,110}\Z')
@@ -61,7 +61,7 @@ def require_vec(data, n, positive=False):
     return result
 
 class MeshBuilder:
-    def __init__(self,material_specs=None):
+    def __init__(self,material_specs=None,preserve_parts=False):
         self.material_specs = material_specs or {}
         self.colors = dict(COLORS)
         for name,info in self.material_specs.items():
@@ -71,8 +71,10 @@ class MeshBuilder:
             self.colors[name]=tuple(int(round(float(x)*255)) for x in rgba)
         self.groups = {}
         self.components = 0
+        self.preserve_parts = bool(preserve_parts)
+        self.part_records = []
 
-    def add(self, material, vertices, faces):
+    def add(self, material, vertices, faces, part_id=None):
         if material not in self.colors:
             raise ValueError(f'Unknown material {material}')
         v=np.asarray(vertices, dtype=np.float32)
@@ -82,6 +84,10 @@ class MeshBuilder:
         if not len(f) or not len(v) or f.min()<0 or f.max()>=len(v):
             raise ValueError('Malformed mesh faces')
         self.groups.setdefault(material, []).append((v, f))
+        safe_id = str(part_id) if part_id is not None else f'component_{self.components:04d}'
+        if not IDENT.fullmatch(safe_id):
+            raise ValueError('Invalid component name for GLB hierarchy')
+        self.part_records.append((safe_id,material,v,f))
         self.components += 1
         if self.components > MAX_COMPONENTS:
             raise ValueError('Too many parts for fast lane')
@@ -214,8 +220,17 @@ class MeshBuilder:
         surface=_sibling('materials_pbr')
         sc=trimesh.Scene()
         faces_n=0;verts_n=0
-        for mat in sorted(self.groups):
-            meshes=self.groups[mat]
+        if self.preserve_parts:
+            # Keep each V2 node addressable by the downstream corrective modeler.
+            # Merging every node by material would erase its semantic part identity.
+            groups=[(part_id,mat,[(v,f)]) for part_id,mat,v,f in self.part_records]
+        else:
+            # Fast lane groups by material to keep GLB object count low.
+            groups=[(mat,mat,self.groups[mat]) for mat in sorted(self.groups)]
+        names=set()
+        for name,mat,meshes in groups:
+            if name in names:raise ValueError('Duplicate semantic part ID: '+name)
+            names.add(name)
             refined=[geo.sanitize_faces(*geo.refine_component(v,f,mat,seed=len(v))) for v,f in meshes]
             verts=np.concatenate([m[0] for m in refined],axis=0)
             faces=[];off=0
@@ -225,7 +240,7 @@ class MeshBuilder:
             if len(verts)>MAX_VERTICES:raise ValueError('Excessive vertex count')
             mesh=trimesh.Trimesh(vertices=verts,faces=faces,process=False)
             surface.texture_mesh(mesh,mat,self.colors[mat],self.material_specs.get(mat,{}).get('pbr'))
-            sc.add_geometry(mesh,geom_name=mat,node_name=mat)
+            sc.add_geometry(mesh,geom_name=name,node_name=name)
             verts_n+=len(mesh.vertices);faces_n+=len(mesh.faces)
         if verts_n>MAX_VERTICES or not faces_n:raise ValueError('Invalid aggregate mesh')
         dims=np.asarray(sc.bounds[1]-sc.bounds[0])
@@ -238,7 +253,8 @@ class MeshBuilder:
             raise ValueError('GLB exporter output invalid')
         return data, {'vertices':verts_n,'triangles':faces_n,'materials':len(self.groups),
                       'bounds_m':[[round(float(x),5) for x in p] for p in sc.bounds],
-                      'parts':self.components,'geometry_audit':audit,
+                      'parts':self.components,'part_ids':([p[0] for p in self.part_records] if self.preserve_parts else []),
+                      'semantic_parts_preserved':self.preserve_parts,'geometry_audit':audit,
                       'surface_tier':'procedural_pbr_albedo_normal','uv_mapped':True}
 
 
@@ -270,7 +286,7 @@ def compile_parts(b,row):
             mat4=np.asarray(part['_matrix'],dtype=float)
             if mat4.shape!=(4,4) or not np.isfinite(mat4).all():
                 raise ValueError('Invalid V2 node transform')
-            local={key:value for key,value in part.items() if key!='_matrix'}
+            local={key:value for key,value in part.items() if key not in ('_matrix','_part_id')}
             child=MeshBuilder(material_specs=b.material_specs)
             compile_parts(child,{'parts':[local]})
             for mat,comps in child.groups.items():
@@ -278,7 +294,7 @@ def compile_parts(b,row):
                     hv=np.column_stack((vertices,np.ones(len(vertices))))
                     transformed=(hv@mat4.T)[:,:3]
                     if np.linalg.det(mat4[:3,:3])<0:faces=faces[:,[0,2,1]]
-                    b.add(mat,transformed,faces)
+                    b.add(mat,transformed,faces,part_id=part.get('_part_id'))
             continue
         op=part.get('op') or part.get('operator')
         mat=part.get('material','steel')
@@ -342,7 +358,8 @@ def process_one(args):
                     return {'asset_id':key,'status':'cached','sha256':prev['sha256'], 'elapsed_seconds':round(time.perf_counter()-start,5),
                             'family':row['family'],'technical_qa':prev.get('technical_qa')}
             except (OSError,ValueError,KeyError): pass
-        b=MeshBuilder(material_specs=row.get('material_specs'))
+        b=MeshBuilder(material_specs=row.get('material_specs'),
+                      preserve_parts=bool(row.get('preserve_parts',False)))
         if row.get('parts'): compile_parts(b,row)
         else:
             _quality_geometry().BUILDERS[row['family']](b,seed=row['seed'],variant=row['variant'])

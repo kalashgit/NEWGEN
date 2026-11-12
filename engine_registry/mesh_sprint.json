@@ -1,6 +1,6 @@
 {
   "engine_id": "newgen.mesh_sprint",
-  "engine_version": "0.3.1",
+  "engine_version": "0.3.2",
   "state": "experimental_candidate_engine",
   "source_project": "kalashgit/last-light-godot",
   "upstream_draft_pr": "https://github.com/kalashgit/last-light-godot/pull/129",

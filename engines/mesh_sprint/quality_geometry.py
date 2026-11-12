@@ -386,7 +386,7 @@ def wearable_shell(builder,material,sections,n=48,depth_ratio=.76):
         inner.append(np.column_stack(((rx-.016)*cx,cy+(ry-.015)*sn,np.full(n,z))))
     _grid(builder,material,outer,caps=False)
     # Reverse face winding to orient normals toward hollow interior.
-    r=np.asarray(inner)[::-1,::-1,:]
+    r=np.asarray(inner)[::-1,:,:]  # flip axial winding for inward-facing shell
     _grid(builder,material,r,caps=False)
     _surface(builder,material,[outer[0],inner[0][::-1][::-1]])
     _surface(builder,material,[outer[-1],inner[-1]])

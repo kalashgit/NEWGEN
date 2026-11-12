@@ -74,7 +74,8 @@ def adapt(data, schema=None):
         # The compiler validates op-specific params, including shapes and dimensions.
         if any(key in params for key in ('op','operator','material','_matrix')):
             raise ValueError('V2 parameters cannot override protected node fields')
-        parts.append({'op':op,'material':material,'_matrix':resolve(node['part_id']).tolist(),**params})
+        parts.append({'op':op,'material':material,'_part_id':node['part_id'],
+                      '_matrix':resolve(node['part_id']).tolist(),**params})
     for edge in geom['attachments']:
         if edge['from_part'] not in nodes or edge['to_part'] not in nodes:
             raise ValueError('V2 attachment references missing part')
@@ -93,4 +94,4 @@ def adapt(data, schema=None):
             'source_reference':data['source_reference']['url'] or '',
             'material_specs':material_specs,'parts':parts,
             'v2_review_warnings':warnings,
-            'require_detailed':True}
+            'require_detailed':True,'preserve_parts':True}

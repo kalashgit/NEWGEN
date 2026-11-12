@@ -36,3 +36,7 @@ The mesh compiler is a **worker engine** within the future NEWGEN master. The ma
 - The 4,347 source catalog is not bulk-ingested yet. Unseen operation coverage remains unknown.
 - Only twelve illustrated family presets are available; no pretrained general mesh reconstruction model is connected.
 - Real-time Godot integration and device performance remain untested.
+
+## Semantic mesh identifiers
+
+Canonical V2 nodes export as distinct GLB mesh nodes named by `part_id`, so downstream agents can identify and revise the offending component. Generic synthetic family presets remain grouped by material for speed. No automatic edit or improvement loop is claimed.

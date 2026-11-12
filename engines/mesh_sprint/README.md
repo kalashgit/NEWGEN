@@ -1,4 +1,4 @@
-# NEWGEN — Mesh Sprint v0.3.1 (Geometry Overhaul)
+# NEWGEN — Mesh Sprint v0.3.2 (Geometry Overhaul)
 
 **Status: executable technical candidate factory, not visual/Golden production approval.**
 
@@ -96,3 +96,5 @@ The NEWGEN module interface is in `engine_registry/mesh_sprint.json`; the source
 
 The normal map and diffuse preview are not proof of PBR fidelity or full gameplay
 quality. Only explicit founder review can promote candidate assets to Golden.
+
+Canonical V2 records now preserve their **part_id GLB nodes**, enabling independently addressable mesh correction. Fast synthetic archetype batches remain material-merged.

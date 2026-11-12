@@ -53,8 +53,11 @@ def test_canonical_v2_schema_parses_and_preserves_transform_and_warnings(tmp_pat
     assert result['status']=='built',result
     s=trimesh.load(tmp_path/'models'/'newgen_test_shelf_001.glb',force='scene')
     assert s.bounds[0][0] > -.5
+    assert set(s.geometry)=={'vertical','shelf'}  # semantic V2 parts are separate GLB nodes
     meta=json.loads((tmp_path/'metadata'/'newgen_test_shelf_001.json').read_text())
     assert meta['canonical_catalog_row']==1
+    assert meta['semantic_parts_preserved'] is True
+    assert meta['part_ids']==['vertical','shelf']
     assert meta['v2_review_warnings']
     assert meta['golden_approved'] is False
 
