@@ -89,7 +89,7 @@ function drawJobs(){
  const table=$("jobs");table.replaceChildren();
  if(!jobs.length){const r=node("tr");const d=node("td","empty","No jobs submitted");d.colSpan=4;r.append(d);table.append(r);return}
  for(const job of jobs){
-  const row=node("tr");row.append(node("td","mono",job.asset_id),node("td","",null),node("td","mono",job.stage),node("td","mono",job.visual_attempts||0));
+  const row=node("tr");row.append(node("td","mono",job.asset_id),node("td",""),node("td","mono",job.stage),node("td","mono",job.visual_attempts||0));
   row.children[1].append(statusBadge(job.status));row.onclick=()=>{selectedId=job.id;drawSelected()};
   table.append(row);
  }
