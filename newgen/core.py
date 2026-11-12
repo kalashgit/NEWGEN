@@ -195,6 +195,7 @@ def run_stage(job: dict, stage: str, attempt: int = 1) -> list[dict]:
     spec = config()["stages"][stage]
     folder = data_root() / "jobs" / job["id"] / stage / f"attempt_{attempt:02d}"
     folder.mkdir(parents=True, exist_ok=True)
+    _event(job, stage, "started", "attempt " + str(attempt))
     if spec.get("type") == "builtin" and spec.get("handler") == "source_intake" and stage == "sprite_2d":
         source = _reference(job["reference"])
         if sha256(source) != job["source_sha256"]:
