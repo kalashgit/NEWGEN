@@ -1,0 +1,171 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://last-light.local/schemas/mesh-recipe-v2-candidate.json",
+  "title": "LAST LIGHT 3D Mesh Recipe V2 Candidate",
+  "type": "object",
+  "required": [
+    "schema", "mesh_recipe_id", "canonical_source_id", "canonical_catalog_row",
+    "source_filename", "source_reference", "archetype", "geometry", "materials",
+    "gameplay", "quality"
+  ],
+  "properties": {
+    "schema": {"const": "LAST_LIGHT_3D_MESH_RECIPE_V2_CANDIDATE"},
+    "mesh_recipe_id": {"type": "string", "minLength": 3},
+    "canonical_source_id": {"type": "string", "minLength": 3},
+    "canonical_catalog_row": {"type": "integer", "minimum": 1, "maximum": 4347},
+    "source_filename": {"type": "string", "minLength": 1},
+    "source_reference": {
+      "type": "object",
+      "required": ["url", "inspection_status", "rights", "visible_facts", "not_visible_or_uncertain"],
+      "properties": {
+        "url": {"type": ["string", "null"]},
+        "inspection_status": {"enum": ["PENDING", "INSPECTED", "UNAVAILABLE", "MISMATCH"]},
+        "rights": {"const": "RESEARCH_ONLY_NO_ARTWORK_REUSE"},
+        "visible_facts": {"type": "array", "items": {"type": "string"}},
+        "not_visible_or_uncertain": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "archetype": {"type": "string", "minLength": 3},
+    "status": {
+      "enum": [
+        "DRAFT_VISION_INSPECTED", "PROVISIONAL_HIDDEN_GEOMETRY",
+        "BLOCKED_REFERENCE", "BLOCKED_GENERATOR_OPERATOR",
+        "NONPHYSICAL_REPRESENTATION"
+      ]
+    },
+    "geometry": {
+      "type": "object",
+      "required": ["units", "axis", "dimensions_estimated_xyz", "nodes", "attachments", "mandatory_negative_spaces"],
+      "properties": {
+        "units": {"const": "metres"},
+        "axis": {"const": "X-right,Y-back,Z-up"},
+        "dimensions_estimated_xyz": {
+          "oneOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/positiveVector3"}
+          ]
+        },
+        "nodes": {"type": "array", "items": {"$ref": "#/$defs/partNode"}},
+        "attachments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["from_part", "to_part", "connection_type"],
+            "properties": {
+              "from_part": {"type": "string"},
+              "to_part": {"type": "string"},
+              "connection_type": {"enum": ["fixed", "hinge", "strap", "seam", "socket", "intentional_gap"]},
+              "point_xyz": {"$ref": "#/$defs/vector3"},
+              "tolerance_m": {"type": "number", "minimum": 0}
+            }
+          }
+        },
+        "mandatory_negative_spaces": {"type": "array", "items": {"type": "object"}}
+      }
+    },
+    "materials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["slot", "pbr", "mapping"],
+        "properties": {
+          "slot": {"type": "string", "minLength": 1},
+          "pbr": {
+            "type": "object",
+            "required": ["base_rgba", "metallic", "roughness"],
+            "properties": {
+              "base_rgba": {
+                "type": "array", "prefixItems": [
+                  {"type": "number", "minimum": 0, "maximum": 1},
+                  {"type": "number", "minimum": 0, "maximum": 1},
+                  {"type": "number", "minimum": 0, "maximum": 1},
+                  {"type": "number", "minimum": 0, "maximum": 1}
+                ], "minItems": 4, "maxItems": 4
+              },
+              "metallic": {"type": "number", "minimum": 0, "maximum": 1},
+              "roughness": {"type": "number", "minimum": 0, "maximum": 1}
+            }
+          },
+          "mapping": {"enum": ["procedural_original", "uv_original", "pending"]}
+        }
+      }
+    },
+    "gameplay": {
+      "type": "object",
+      "required": ["collision_shapes", "sockets", "states", "lods"],
+      "properties": {
+        "collision_shapes": {"type": "array", "items": {"type": "object"}},
+        "sockets": {"type": "array", "items": {"type": "object"}},
+        "states": {"type": "array", "items": {"type": "object"}},
+        "lods": {"type": "array", "items": {"type": "object"}, "minItems": 3}
+      }
+    },
+    "quality": {
+      "type": "object",
+      "required": [
+        "required_landmarks", "forbidden_artifacts", "inspection_angles",
+        "render_comparison_status", "blender_export", "godot_import", "founder_golden"
+      ],
+      "properties": {
+        "required_landmarks": {"type": "array", "items": {"type": "string"}},
+        "forbidden_artifacts": {"type": "array", "items": {"type": "string"}},
+        "inspection_angles": {"type": "integer", "minimum": 4},
+        "render_comparison_status": {"type": "string"},
+        "blender_export": {"type": "string"},
+        "godot_import": {"type": "string"},
+        "founder_golden": {"const": "NOT_APPROVED"}
+      }
+    }
+  },
+  "$defs": {
+    "vector3": {
+      "type": "array",
+      "prefixItems": [{"type": "number"}, {"type": "number"}, {"type": "number"}],
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "positiveVector3": {
+      "type": "array",
+      "prefixItems": [
+        {"type": "number", "exclusiveMinimum": 0},
+        {"type": "number", "exclusiveMinimum": 0},
+        {"type": "number", "exclusiveMinimum": 0}
+      ],
+      "minItems": 3,
+      "maxItems": 3
+    },
+    "partNode": {
+      "type": "object",
+      "required": [
+        "part_id", "parent_id", "operation", "operator_version",
+        "parameters", "transform", "material_slot",
+        "closed_mesh_expected", "evidence", "confidence"
+      ],
+      "properties": {
+        "part_id": {"type": "string", "minLength": 1},
+        "parent_id": {"type": ["string", "null"]},
+        "operation": {"type": "string", "minLength": 2},
+        "operator_version": {"type": "string"},
+        "parameters": {"type": "object"},
+        "transform": {
+          "type": "object",
+          "required": ["position_xyz", "rotation_deg_xyz", "scale_xyz"],
+          "properties": {
+            "position_xyz": {"$ref": "#/$defs/vector3"},
+            "rotation_deg_xyz": {"$ref": "#/$defs/vector3"},
+            "scale_xyz": {"$ref": "#/$defs/positiveVector3"}
+          }
+        },
+        "material_slot": {"type": "string"},
+        "closed_mesh_expected": {"type": "boolean"},
+        "evidence": {
+          "enum": [
+            "DIRECTLY_VISIBLE", "SECONDARY_REFERENCE",
+            "GENERIC_PHYSICAL_PRIOR", "UNOBSERVED_ASSUMPTION"
+          ]
+        },
+        "confidence": {"type": "number", "minimum": 0, "maximum": 1}
+      }
+    }
+  }
+}
