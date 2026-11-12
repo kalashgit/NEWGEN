@@ -1,0 +1,22 @@
+{
+  "engine_id": "newgen.mesh_sprint",
+  "engine_version": "0.3.1",
+  "state": "experimental_candidate_engine",
+  "source_project": "kalashgit/last-light-godot",
+  "upstream_draft_pr": "https://github.com/kalashgit/last-light-godot/pull/129",
+  "runner": "engines/mesh_sprint/factory.py",
+  "input_formats": ["canonical_last_light_v2_jsonl", "explicit_parts_jsonl", "csv", "json"],
+  "outputs": {
+    "models": "models/{asset_id}.glb",
+    "metadata": "metadata/{asset_id}.json",
+    "run_report": "report.json",
+    "technical_verifier": "engines/mesh_sprint/verify.py",
+    "visual_review": "engines/mesh_sprint/qa_multiview.py"
+  },
+  "coordinate_system": "X-right,Y-back,Z-up; metres",
+  "cannot_claim": ["image understanding", "Golden approval", "2,000 catalog accurate meshes", "Blender or Godot runtime quality", "artistic similarity"],
+  "promotion_gate": "FOUNDER_APPROVAL_REQUIRED",
+  "closed_loop_visual_correction": "NOT_CONNECTED",
+  "game_asset_factory": "NOT_CONNECTED",
+  "canonical_recipe_schema": "contracts/last_light_v2.schema.json"
+}

@@ -1,0 +1,20 @@
+name: NEWGEN Mesh Sprint isolated QA
+on:
+  push:
+    paths: ['engines/mesh_sprint/**', 'contracts/last_light_v2.schema.json', 'tests/**', '.github/workflows/newgen-mesh-sprint.yml']
+  pull_request:
+    paths: ['engines/mesh_sprint/**', 'contracts/last_light_v2.schema.json', 'tests/**', '.github/workflows/newgen-mesh-sprint.yml']
+jobs:
+  mesh-compiler:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - run: python -m pip install -r engines/mesh_sprint/requirements.txt
+      - run: python -m pytest -q tests
+      - name: Execute candidate GLB smoke and independent verification
+        run: |
+          python engines/mesh_sprint/factory.py --demo 12 --out /tmp/newgen_mesh_smoke --workers 2
+          python engines/mesh_sprint/verify.py --root /tmp/newgen_mesh_smoke
