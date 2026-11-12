@@ -1,0 +1,20 @@
+name: NEWGEN control-plane contracts
+on:
+  push:
+    branches:
+      - 'feature/unified-asset-factory-control-plane-v1'
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  control-plane-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Verify no external inference required for contract tests
+        run: python -m unittest discover -s tests -p 'test_control_plane.py' -v

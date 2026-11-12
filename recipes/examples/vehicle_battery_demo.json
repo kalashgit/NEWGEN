@@ -1,0 +1,104 @@
+{
+  "schema": "newgen.recipe.v1",
+  "asset_id": "vehicle_battery_demo",
+  "units": "meters",
+  "note": "Synthetic engine demonstration; not derived from or visually verified against founder reference; NEVER Golden.",
+  "materials": {
+    "polymer_body": {
+      "rgba": [
+        0.08,
+        0.1,
+        0.12,
+        1
+      ],
+      "metallic": 0,
+      "roughness": 0.77
+    },
+    "lid_polymer": {
+      "rgba": [
+        0.13,
+        0.15,
+        0.18,
+        1
+      ],
+      "metallic": 0,
+      "roughness": 0.65
+    },
+    "metal_terminal": {
+      "rgba": [
+        0.67,
+        0.7,
+        0.72,
+        1
+      ],
+      "metallic": 0.9,
+      "roughness": 0.3
+    }
+  },
+  "components": [
+    {
+      "id": "casing",
+      "primitive": "box",
+      "size": [
+        0.26,
+        0.17,
+        0.19
+      ],
+      "position": [
+        0,
+        0,
+        0.095
+      ],
+      "material": "polymer_body",
+      "bevel": 0.012
+    },
+    {
+      "id": "lid",
+      "primitive": "box",
+      "size": [
+        0.26,
+        0.17,
+        0.022
+      ],
+      "position": [
+        0,
+        0,
+        0.187
+      ],
+      "material": "lid_polymer",
+      "bevel": 0.004
+    },
+    {
+      "id": "positive_terminal",
+      "primitive": "cylinder",
+      "size": [
+        0.025,
+        0.025,
+        0.029
+      ],
+      "position": [
+        -0.085,
+        -0.04,
+        0.214
+      ],
+      "material": "metal_terminal",
+      "bevel": 0.001
+    },
+    {
+      "id": "negative_terminal",
+      "primitive": "cylinder",
+      "size": [
+        0.025,
+        0.025,
+        0.029
+      ],
+      "position": [
+        0.085,
+        -0.04,
+        0.214
+      ],
+      "material": "metal_terminal",
+      "bevel": 0.001
+    }
+  ]
+}

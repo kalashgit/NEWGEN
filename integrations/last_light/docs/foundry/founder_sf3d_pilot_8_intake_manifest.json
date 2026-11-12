@@ -1,0 +1,90 @@
+{
+  "golden_approved": 0,
+  "items": [
+    {
+      "artistic_review": "NOT_GOLDEN",
+      "candidate_id": "pilot_canned_chili_01",
+      "concept": "canned_chili",
+      "input_sha256": "fd6dab287e55345d0b244d8d566acc908531f4c7455090d401642ffeff97eaa4",
+      "isolated_sprite_sha256": "cfbf379638c4e0683e0479d6db740fb793a3cffef8252595192c28a8428a4cee",
+      "sf3d_inference": "NOT_RUN",
+      "source_sheet_position": 601,
+      "source_sheet_sha256": "c3ecf66fe7bc3eefc2d26ee93feee3dc3ff66f6077a58e93e15e3f4c814cdd3b"
+    },
+    {
+      "artistic_review": "NOT_GOLDEN",
+      "candidate_id": "pilot_canvas_canteen_01",
+      "concept": "canvas_canteen",
+      "input_sha256": "dcad725bec223bda15a691576ab61607d0664b81c424deef7a6ba492f7fce789",
+      "isolated_sprite_sha256": "fca1136b0fdde382e83ffbe7478c93977259d021256959651d4ea14f35b0e73a",
+      "sf3d_inference": "NOT_RUN",
+      "source_sheet_position": 608,
+      "source_sheet_sha256": "c3ecf66fe7bc3eefc2d26ee93feee3dc3ff66f6077a58e93e15e3f4c814cdd3b"
+    },
+    {
+      "artistic_review": "NOT_GOLDEN",
+      "candidate_id": "pilot_messenger_bag_01",
+      "concept": "messenger_bag",
+      "input_sha256": "5963d0c61be56bc66b3993f963d06c6c87f83bc8a5ff781077cc084200d978f5",
+      "isolated_sprite_sha256": "2c3c8c4ed331ba7547588f828c25b60cd8ad33159c4e950206d43d4a66712d9c",
+      "sf3d_inference": "NOT_RUN",
+      "source_sheet_position": 611,
+      "source_sheet_sha256": "c3ecf66fe7bc3eefc2d26ee93feee3dc3ff66f6077a58e93e15e3f4c814cdd3b"
+    },
+    {
+      "artistic_review": "NOT_GOLDEN",
+      "candidate_id": "pilot_vehicle_battery_01",
+      "concept": "vehicle_battery",
+      "input_sha256": "9b37ae3a5edd9672dbfd1362b65016453874aa6cd46e484b0833eabc2fb70609",
+      "isolated_sprite_sha256": "e69103e64deb44dcc7213ae142b9767b8f0fa2eeb44b05a2f0557025ca8c33b7",
+      "sf3d_inference": "NOT_RUN",
+      "source_sheet_position": 614,
+      "source_sheet_sha256": "c3ecf66fe7bc3eefc2d26ee93feee3dc3ff66f6077a58e93e15e3f4c814cdd3b"
+    },
+    {
+      "artistic_review": "NOT_GOLDEN",
+      "candidate_id": "pilot_carburetor_01",
+      "concept": "carburetor",
+      "input_sha256": "b6d179136806e1b1dafb5fa61b16aa24630781bf38e085f03b7f56d36b377e5c",
+      "isolated_sprite_sha256": "1024aecaad1581fc9c66bad3907bb8d56d8f2bc9f196fd039ea69a764b1b23dc",
+      "sf3d_inference": "NOT_RUN",
+      "source_sheet_position": 620,
+      "source_sheet_sha256": "c3ecf66fe7bc3eefc2d26ee93feee3dc3ff66f6077a58e93e15e3f4c814cdd3b"
+    },
+    {
+      "artistic_review": "NOT_GOLDEN",
+      "candidate_id": "pilot_cast_iron_skillet_01",
+      "concept": "cast_iron_skillet",
+      "input_sha256": "9007f33bdd5b90544c2d9da907c15e4e4c5f5b0abb875c524b0e760e3152a2d6",
+      "isolated_sprite_sha256": "5b336ee3f34297afab52475de8bd21a5f956b765e5d4f719a91fa7eab03e8802",
+      "sf3d_inference": "NOT_RUN",
+      "source_sheet_position": 626,
+      "source_sheet_sha256": "c3ecf66fe7bc3eefc2d26ee93feee3dc3ff66f6077a58e93e15e3f4c814cdd3b"
+    },
+    {
+      "artistic_review": "NOT_GOLDEN",
+      "candidate_id": "pilot_cheese_wedge_01",
+      "concept": "cheese_wedge",
+      "input_sha256": "2800e715c7d21d98a6de4474e2840898149e4734f22a417baa8509b1f373e903",
+      "isolated_sprite_sha256": "b4fdb3b00d5fe6ff1495bfebdfbf4052f0395c30fb41aea1796d442e667c6f52",
+      "sf3d_inference": "NOT_RUN",
+      "source_sheet_position": 634,
+      "source_sheet_sha256": "c3ecf66fe7bc3eefc2d26ee93feee3dc3ff66f6077a58e93e15e3f4c814cdd3b"
+    },
+    {
+      "artistic_review": "NOT_GOLDEN",
+      "candidate_id": "pilot_tactical_vest_01",
+      "concept": "tactical_vest",
+      "input_sha256": "427114184927220a67efeb3fc7e3d4d1b8428dc4d8d73c306f590ac93d3f4585",
+      "isolated_sprite_sha256": "0a50875a9bbc15996bf5740dd944e6b7cfae760f1bb5aa6b55ba6c0973f165d5",
+      "sf3d_inference": "NOT_RUN",
+      "source_sheet_position": 644,
+      "source_sheet_sha256": "c3ecf66fe7bc3eefc2d26ee93feee3dc3ff66f6077a58e93e15e3f4c814cdd3b"
+    }
+  ],
+  "notion_canonical_admission": "UNRESOLVED",
+  "source_sha256": "c3ecf66fe7bc3eefc2d26ee93feee3dc3ff66f6077a58e93e15e3f4c814cdd3b",
+  "source_sheet": "BEF3741D-5B4B-44CE-ACFE-16BBF48A7154(1).jpeg",
+  "status": "INPUTS_PREPARED_NO_3D_INFERENCE",
+  "unique_concepts": 8
+}
