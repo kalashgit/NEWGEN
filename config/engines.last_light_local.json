@@ -1,0 +1,16 @@
+{
+  "schema": "newgen.engine-config.v1",
+  "stages": {
+    "sprite_2d": {"type":"builtin","handler":"source_intake","timeout_s":30},
+    "mesh_3d": {
+      "type":"external",
+      "argv":["python","-m","tools.last_light_mesh_adapter","--job-dir","{job_dir}","--stage-dir","{stage_dir}","--asset-id","{asset_id}"],
+      "timeout_s":600
+    },
+    "model_3d":{"type":"external","argv":[],"timeout_s":1800},
+    "visual_qa":{"type":"external","argv":[],"timeout_s":600},
+    "repair_3d":{"type":"external","argv":[],"timeout_s":600},
+    "gameplay_asset":{"type":"external","argv":[],"timeout_s":600}
+  },
+  "limits":{"max_qa_attempts":3,"max_queued_jobs":500,"max_new_batch":100}
+}
