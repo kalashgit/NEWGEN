@@ -15,3 +15,13 @@ The `engines/mesh_sprint` module was imported from LAST LIGHT's isolated Mesh Sp
 See [the Mesh Sprint engine documentation](engines/mesh_sprint/README.md), [the engine registry](engine_registry/mesh_sprint.json), and [integration contract](docs/MESH_SPRINT_INTEGRATION.md).
 
 **Do not confuse synthetic GLB file throughput with reference-accurate finished game assets.** No module may auto-approve Golden assets, merge into a game, or publish third-party source artwork.
+
+## V0.4 — closed-loop game asset pilot
+
+The four stages **recipe architect → CV defect detector → corrective modeler → game asset packager** now execute end to end on three original, explicitly curated demo identities. Real GLBs, LODs, collisions, Godot scenes and eight static directional images are generated. No Golden-quality claim, no real VLM, and no full 4,347-item catalog connection. See [integration and evidence](docs/NEWGEN_CLOSED_LOOP_V04.md).
+
+```bash
+pip install -r engines/mesh_sprint/requirements.txt
+pip install opencv-python-headless
+python engines/mesh_sprint/closed_loop.py --out output/closed_loop
+```
