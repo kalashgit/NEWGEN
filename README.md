@@ -54,3 +54,12 @@ Its job requires a source-grounded, validated `{job_dir}/recipe.json` created by
 Repo stays private. Original art should remain in private intake/storage, not committed unless specifically authorized. Dashboard is **localhost-only**, not a hosted service. For human approval actions, server must have a `NEWGEN_FOUNDER_TOKEN` environment variable; the dashboard prompts for the matching token only when approving. No auto-merges, no game-production changes, no provider billing.
 
 The architecture targets reproducible, high-throughput pipelines across thousands of canonical models, but runtime, asset complexity, hardware, and quality gates prevent an honest promise of **instantaneous unlimited** production. Benchmark approved *gameplay assets*, not raw meshes.
+
+## LAST LIGHT catalog mesh engine V1.1 (opt-in)
+
+NEWGEN now includes the 4,347-recipe procedural GLB builder plus a `mesh_3d` adapter, isolated local engine config, source/recipe hash evidence and CPU tests. This is **not** a trained image-to-3D model, not source-verified reconstruction and not the complete animated Godot pipeline.
+
+- See [`docs/LAST_LIGHT_MESH_V1_1.md`](docs/LAST_LIGHT_MESH_V1_1.md) for local installation, full-catalog bulk build, and queue-adapter usage.
+- For the dashboard mesh stage, set `NEWGEN_ENGINE_CONFIG=config/engines.last_light_local.json` and `NEWGEN_LAST_LIGHT_CATALOG` to the private V3 JSONL. Install `integrations/last_light/requirements-mesh.txt`.
+- Job IDs `ll_0001` through `ll_4347` map to exact catalog records. NEWGEN still needs founder-supplied licensed intake images and independent visual QA.
+- All other stages remain fail-closed/unconfigured. No automatic Golden or animation/gameplay approval.
